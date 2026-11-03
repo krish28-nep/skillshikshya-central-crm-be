@@ -284,6 +284,9 @@ class GlobalPaymentViewSet(viewsets.ReadOnlyModelViewSet):
 class GlobalCallViewSet(viewsets.ReadOnlyModelViewSet):
     """Flat, cross-lead call log. Newest calls first by default."""
     queryset = LeadCall.objects.none()
+    # Calls created from the Log Call dialog do not populate LeadCall.branch.
+    # Use the lead's branch so those calls remain available to branch filters.
+    branch_field = 'lead__branch'
     serializer_class = GlobalCallSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter, BranchFilterBackend]
